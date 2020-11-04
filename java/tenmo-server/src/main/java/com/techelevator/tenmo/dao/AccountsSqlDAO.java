@@ -18,25 +18,25 @@ public class AccountsSqlDAO implements AccountsDAO {
 	
 	
 	@Override
-	public double viewCurrentBalance(int accountId, int userId) {
+	public double viewCurrentBalance(int accountId) {
 		double currentBalance = 0;
 		
-		String SqlViewCurrentBalance = "SELECT balance FROM accounts WHERE account_id= ? AND user_id = ?";
+		String SqlViewCurrentBalance = "SELECT balance FROM accounts WHERE account_id= ?";
 		
-		SqlRowSet result = jdbcTemplate.queryForRowSet(SqlViewCurrentBalance, accountId, userId);
+		SqlRowSet result = jdbcTemplate.queryForRowSet(SqlViewCurrentBalance, accountId);
 		while(result.next()){
 			Accounts ac = mapToAccounts(result);
 			currentBalance = ac.getBalance();
 		}
 		
-		return currentBalance ;
+		return currentBalance;
 	}
 
 	
 	private Accounts mapToAccounts(SqlRowSet ars) {
 		Accounts ac =  new Accounts();
-		ac.setAccountId(ars.getInt("accountId"));
-		ac.setUserId(ars.getInt("userId"));
+		ac.setAccountId(ars.getInt("account_id"));
+		ac.setUserId(ars.getInt("user_id"));
 		ac.setBalance(ars.getDouble("balance"));
 		return ac;
 		

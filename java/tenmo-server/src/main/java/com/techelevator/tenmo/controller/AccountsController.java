@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.AccountsDAO;
 
 @RestController
-//@RequestMapping("/accounts")
+@RequestMapping("accounts")
 public class AccountsController {
 	
 	private AccountsDAO dao;
@@ -18,9 +18,9 @@ public class AccountsController {
 		
 	}
 	
-	@RequestMapping(path = "/{id}/{id}", method = RequestMethod.GET)
-	public double viewCurrentBalance(@PathVariable int accountId, @PathVariable int userId ) {
-		return dao.viewCurrentBalance(accountId, userId);
+	@RequestMapping(path = "", method = RequestMethod.GET)
+	public double viewCurrentBalance(@PathVariable int accountId) {
+		return dao.viewCurrentBalance(accountId);
 	}
 
 }

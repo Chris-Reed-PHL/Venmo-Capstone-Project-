@@ -6,10 +6,9 @@ public class TransferTypes {
 	private String transferTypeDescription;
 
 	
-	public TransferTypes( int transferTypesId, String transferTypeDescription) {
+	public TransferTypes() {
 		
-		this.transferTypesId = transferTypesId;
-		this.transferTypeDescription = transferTypeDescription;
+		
 }
 
 

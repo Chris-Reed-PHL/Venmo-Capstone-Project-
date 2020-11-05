@@ -2,29 +2,23 @@ package com.techelevator.tenmo.model;
 
 public class Transfers {
 	
-	private int transferId;
+	private long transferId;
 	private int transferTypeId;
 	private int transferStatusId;
 	private int accountFrom;
 	private int accountTo;
 	private double amount;
 	
-	public Transfers (int transferId, int transferTypeId , int transferStatusId, int accountFrom, int accountTo, double amount ) {
+	public Transfers () {
 		
-		this.transferId = transferId;
-		this.transferTypeId = transferTypeId;
-		this.transferStatusId = transferStatusId;
-		this.accountFrom =  accountFrom;
-		this.accountTo = accountTo;
-		this.amount = amount;
 		
 	}
 
-	public int getTransferId() {
+	public long getTransferId() {
 		return transferId;
 	}
 
-	public void setTransferId(int transferId) {
+	public void setTransferId(long transferId) {
 		this.transferId = transferId;
 	}
 

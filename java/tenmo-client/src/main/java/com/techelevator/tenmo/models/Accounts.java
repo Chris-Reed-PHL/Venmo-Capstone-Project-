@@ -7,10 +7,8 @@ public class Accounts {
 	private double balance;
 	
 	
-	public Accounts( int accountId, int userId) {
-		this.accountId =  accountId;
-		this.userId = userId;
-		balance = 1000;
+	public Accounts() {
+		
 	}
 	
 	public int getAccountId() {

@@ -4,9 +4,10 @@ import org.openqa.selenium.remote.http.HttpMethod;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+//import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-//import com.techelevator.hotels.models.Reservation;
+
 import com.techelevator.tenmo.models.Accounts;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.UserCredentials;
@@ -77,11 +78,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		}
 	}
 
-	private void viewCurrentBalance(int accountId) {
+	private void viewCurrentBalance() {
 		Accounts account = null;
 		
-		
-		try {
+//		try {
 		
 		 HttpHeaders headers = new HttpHeaders();
 		    headers.setContentType(MediaType.APPLICATION_JSON);
@@ -89,11 +89,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		    HttpEntity entity = new HttpEntity<>(headers);
 		    
 		
-		account = restTemplate.getForObject(API_BASE_URL + "accounts" + accountId, entity, Accounts.class);
+		account = restTemplate.getForObject(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), Accounts.class);
 		System.out.println("Your current balance is: " + account.getBalance());
-		}catch(Exception ex) {
-			System.out.println("WRONG!");
-		}
+//		}catch(Exception ex) {
+//			System.out.println("WRONG!");
+//		}
 	}  
 	
 	

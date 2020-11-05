@@ -1,8 +1,10 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.Accounts;
+
 public interface AccountsDAO {
 
-	double viewCurrentBalance(int accountId);
+	Accounts viewCurrentBalance(long userId);
 	
 	
 }

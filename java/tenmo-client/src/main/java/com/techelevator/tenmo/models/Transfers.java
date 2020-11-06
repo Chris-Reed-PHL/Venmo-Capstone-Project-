@@ -1,22 +1,19 @@
 package com.techelevator.tenmo.models;
 
+import java.math.BigDecimal;
+
 public class Transfers {
 
-	private int transferId;
-	private int transferTypeId;
-	private int transferStatusId;
-	private int accountFrom;
-	private int accountTo;
-	private double amount;
+	private Integer transferId;
+	private Integer transferTypeId;
+	private Integer transferStatusId;
+	private Integer accountFrom;
+	private Integer accountTo;
+	private BigDecimal amount;
 	
-	public Transfers (int transferId, int transferTypeId , int transferStatusId, int accountFrom, int accountTo, double amount ) {
-		
-		this.transferId = transferId;
-		this.transferTypeId = transferTypeId;
-		this.transferStatusId = transferStatusId;
-		this.accountFrom =  accountFrom;
-		this.accountTo = accountTo;
-		this.amount = amount;
+	public Transfers () {
+//	transferTypeId = 2;
+//	transferStatusId = 2;
 		
 	}
 
@@ -24,7 +21,7 @@ public class Transfers {
 		return transferId;
 	}
 
-	public void setTransferId(int transferId) {
+	public void setTransferId(Integer transferId) {
 		this.transferId = transferId;
 	}
 
@@ -32,7 +29,7 @@ public class Transfers {
 		return transferTypeId;
 	}
 
-	public void setTransferTypeId(int transferTypeId) {
+	public void setTransferTypeId(Integer transferTypeId) {
 		this.transferTypeId = transferTypeId;
 	}
 
@@ -40,7 +37,7 @@ public class Transfers {
 		return transferStatusId;
 	}
 
-	public void setTransferStatusId(int transferStatusId) {
+	public void setTransferStatusId(Integer transferStatusId) {
 		this.transferStatusId = transferStatusId;
 	}
 
@@ -48,7 +45,7 @@ public class Transfers {
 		return accountFrom;
 	}
 
-	public void setAccountFrom(int accountFrom) {
+	public void setAccountFrom(Integer accountFrom) {
 		this.accountFrom = accountFrom;
 	}
 
@@ -56,15 +53,15 @@ public class Transfers {
 		return accountTo;
 	}
 
-	public void setAccountTo(int accountTo) {
+	public void setAccountTo(Integer accountTo) {
 		this.accountTo = accountTo;
 	}
 
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 

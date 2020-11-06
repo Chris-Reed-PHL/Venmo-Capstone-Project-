@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import com.techelevator.tenmo.model.User;
 @Service
 public class UserSqlDAO implements UserDAO {
 
-    private static final double STARTING_BALANCE = 1000;
+    private static final BigDecimal STARTING_BALANCE = new BigDecimal("1000.00");
     private JdbcTemplate jdbcTemplate;
 
     public UserSqlDAO(JdbcTemplate jdbcTemplate) {

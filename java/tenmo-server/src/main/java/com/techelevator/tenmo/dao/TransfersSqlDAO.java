@@ -75,7 +75,7 @@ public class TransfersSqlDAO implements TransfersDAO{
 		transfer.setTransferStatusId(t.getInt("transfer_status_id"));
 		transfer.setAccountFrom(t.getInt("account_from"));
 		transfer.setAccountTo(t.getInt("account_to"));
-		transfer.setAmount(t.getDouble("amount"));
+		transfer.setAmount(t.getBigDecimal("amount"));
 		return transfer;
 	}
 

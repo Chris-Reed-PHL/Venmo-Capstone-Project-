@@ -21,8 +21,8 @@ public class TransferController {
 	}
 	
 	@RequestMapping(path = "/send", method = RequestMethod.POST)
-	public boolean sendTransfer( @RequestBody Transfers transfer) {
-		return dao.sendBucks(transfer);
+	public void sendTransfer( @RequestBody Transfers transfer) {
+		dao.sendBucks(transfer);
 
 }
 	@RequestMapping(path = "/request", method = RequestMethod.POST)

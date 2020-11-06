@@ -1,10 +1,10 @@
 package com.techelevator.tenmo;
 
-import org.openqa.selenium.remote.http.HttpMethod;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-//import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -82,19 +82,14 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void viewCurrentBalance() {
 		Accounts account = null;
 		
-//		try {
-		
-		 HttpHeaders headers = new HttpHeaders();
-		    headers.setContentType(MediaType.APPLICATION_JSON);
-		    headers.setBearerAuth(AUTH_TOKEN);
-		    HttpEntity entity = new HttpEntity<>(headers);
+		try {
 		    
 		
-		account = restTemplate.getForObject(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), Accounts.class);
+		account = restTemplate.exchange(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Accounts.class).getBody();
 		System.out.println("Your current balance is: " + account.getBalance());
-//		}catch(Exception ex) {
-//			System.out.println("WRONG!");
-//		}
+		}catch(Exception ex) {
+			System.out.println("WRONG!");
+		}
 	}  
 	
 	
@@ -179,5 +174,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		String username = console.getUserInput("Username");
 		String password = console.getUserInput("Password");
 		return new UserCredentials(username, password);
+	}
+	
+	private HttpEntity makeAuthEntity() {
+	 HttpHeaders headers = new HttpHeaders();
+	    headers.setBearerAuth(AUTH_TOKEN);
+	    HttpEntity entity = new HttpEntity<>(headers);
+		return entity;
+	    
 	}
 }

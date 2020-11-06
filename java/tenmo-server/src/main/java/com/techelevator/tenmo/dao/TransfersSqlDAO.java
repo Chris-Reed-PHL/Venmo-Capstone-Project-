@@ -15,57 +15,56 @@ public class TransfersSqlDAO implements TransfersDAO{
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-//	@Override
-//	public Transfers sendBucks(Transfers transfer) {
-//
-//		Transfers sendTransfer = null;
-//
-//		String SqlSendBucks =  "INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount)" +
-//				"VALUES(?,?,?,?,?)";
-//
-//		jdbcTemplate.update(SqlSendBucks, transferTypeId,transfertStatusId ,accountFrom, accountTo, amount);
-//		SqlRowSet row = jdbcTemplate.queryForRowSet("SELECT * FROM transfers WHERE transfer_type_id = ? AND transfer_status_id = ? AND account_from = ? AND account_to = ? AND amount = ?", transferTypeId,transfertStatusId ,accountFrom, accountTo, amount);
-//
-//		if(row.next()) {
-//			transfer = mapToTransfers(row);
-//		}
-//
-//		return sendTransfer;
-//	}
-//
-//	@Override
-//	public Transfers requstBucks(Transfers transfer) {
-//		Transfers requestTransfer = null;
-//
-//		String SqlSendBucks =  "INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount)" +
-//				"VALUES(?,?,?,?,?)";
-//
-//		jdbcTemplate.update(SqlSendBucks, transferTypeId,transfertStatusId ,accountFrom, accountTo, amount);
-//		SqlRowSet row = jdbcTemplate.queryForRowSet("SELECT * FROM transfers WHERE transfer_type_id = ? AND transfer_status_id = ? AND account_from = ? AND account_to = ? AND amount = ?", transferTypeId,transfertStatusId ,accountFrom, accountTo, amount);
-//
-//		if(row.next()) {
-//			transfer = mapToTransfers(row);
-//		}
-//
-//		return requestTransfer;
-//	}
+
 
 	//swap user_id / accountFrom & accountTo
 	@Override
-	public Transfers createTransfer(int accountTo,double amount, int userId) {
-		Transfers transfer = null;
+	public boolean sendBucks(Transfers transfer) {
+//		Transfers sendTransfer = null;
+		boolean updateResult =  false;
+		String SqlSendTransfer =  "BEGIN TRANSACTION;"
+				+ " INSERT INTO transfers (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount)"
+				+ " VALUES(DEFAULT, (SELECT transfer_type_id FROM transfer_types WHERE transfer_type_desc = 'Send'),"
+				+ " (SELECT transfer_status_id FROM transfer_statuses WHERE transfer_status_desc = 'Approved'),"
+				+ " (SELECT account_id FROM accounts WHERE user_id= ?),"
+				+ " (SELECT account_id FROM accounts WHERE user_id= ?), ?);" 
+				+ " UPDATE accounts SET balance = balance + ? WHERE account_id = ?;"
+				+ " UPDATE accounts SET balance = balance - ? WHERE account_id = ?;"
+				+ " COMMIT";
+		
 
-		String SqlCreateTransfer =  "INSERT into transfers(transfer_type_id, transfer_status_id, account_from, account_to, amount)" +
-				"VALUES(?,?,?,?,?)";
+		int result = jdbcTemplate.update(SqlSendTransfer,transfer.getAccountFrom(), transfer.getAccountTo(),transfer.getAmount(), transfer.getAmount(),transfer.getAccountTo(),transfer.getAmount(), transfer.getAccountFrom());
 
-		jdbcTemplate.update(SqlCreateTransfer, accountTo, amount, userId);
-		SqlRowSet row = jdbcTemplate.queryForRowSet("SELECT * FROM transfers WHERE account_to = ? AND amount = ? AND account_from = ?", accountTo, amount, userId);
-
-		if(row.next()) {
-			transfer = mapToTransfers(row);
+		if(result == 0) {
+			updateResult = true;
 		}
-		return transfer;
+		return updateResult;
+		
+		
 	}
+	@Override
+	public boolean requestBucks(Transfers transfer) {
+//		Transfers requestTransfer = null;
+		boolean updateResult =  false;
+		String SqlrequestTransfer =  "BEGIN TRANSACTION;"
+				+ " INSERT INTO transfers (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount)"
+				+ " VALUES(DEFAULT, (SELECT transfer_type_id FROM transfer_types WHERE transfer_type_desc = 'Request'),"
+				+ " (SELECT transfer_status_id FROM transfer_statuses WHERE transfer_status_desc = 'Pending'),"
+				+ " (SELECT account_id FROM accounts WHERE user_id= ?),"
+				+ " (SELECT account_id FROM accounts WHERE user_id= ?), ?);" 
+				+ " UPDATE accounts SET balance = balance + ? WHERE account_id = ?;"
+				+ " UPDATE accounts SET balance = balance - ? WHERE account_id = ?;"
+				+ " COMMIT";
+
+		int result = jdbcTemplate.update(SqlrequestTransfer, transfer.getAccountTo(), transfer.getAccountFrom(), transfer.getAmount(), transfer.getAmount(), transfer.getAccountFrom(), transfer.getAmount(), transfer.getAccountTo());
+		
+		if(result == 0) {
+			updateResult = true;
+		}
+		return updateResult;
+	}
+	
+	
 
 	private Transfers mapToTransfers(SqlRowSet t) {
 
@@ -79,6 +78,15 @@ public class TransfersSqlDAO implements TransfersDAO{
 		transfer.setAmount(t.getDouble("amount"));
 		return transfer;
 	}
+
+
+
+
+
+
+	
+
+
 
 
 

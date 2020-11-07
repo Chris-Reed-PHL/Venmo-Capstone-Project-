@@ -1,5 +1,8 @@
 package com.techelevator.tenmo.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
@@ -64,7 +67,24 @@ public class TransfersSqlDAO implements TransfersDAO{
 		return updateResult;
 	}
 	
-	
+	@Override
+	public List <Transfers> viewTransferHistory(Long userId) {
+		List<Transfers> transactions =  new ArrayList<>();
+		Transfers transfer = null;
+		
+		String viewTransHistory =  "SELECT * FROM transfers t JOIN accounts a ON t.account_from = a.account_id WHERE a.user_id = ?"
+								+ " UNION"
+								+ " SELECT * FROM transfers t JOIN accounts a ON t.account_to = a.account_id WHERE a.user_id = ?";
+		SqlRowSet spending = jdbcTemplate.queryForRowSet(viewTransHistory,userId, userId );
+		
+		while(spending.next()) {
+			transfer = mapToTransfers(spending);
+			transactions.add(transfer);
+		}
+		
+		return transactions;
+	}
+
 
 	private Transfers mapToTransfers(SqlRowSet t) {
 
@@ -79,6 +99,9 @@ public class TransfersSqlDAO implements TransfersDAO{
 		return transfer;
 	}
 
+
+
+	
 
 
 

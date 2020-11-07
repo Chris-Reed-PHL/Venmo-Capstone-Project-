@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public class Transfers {
 
 	private Integer transferId;
-	private Integer transferTypeId;
-	private Integer transferStatusId;
+//	private Integer transferTypeId;
+//	private Integer transferStatusId;
 	private Integer accountFrom;
 	private Integer accountTo;
 	private BigDecimal amount;
@@ -25,21 +25,21 @@ public class Transfers {
 		this.transferId = transferId;
 	}
 
-	public int getTransferTypeId() {
-		return transferTypeId;
-	}
-
-	public void setTransferTypeId(Integer transferTypeId) {
-		this.transferTypeId = transferTypeId;
-	}
-
-	public int getTransferStatusId() {
-		return transferStatusId;
-	}
-
-	public void setTransferStatusId(Integer transferStatusId) {
-		this.transferStatusId = transferStatusId;
-	}
+//	public int getTransferTypeId() {
+//		return transferTypeId;
+//	}
+//
+//	public void setTransferTypeId(Integer transferTypeId) {
+//		this.transferTypeId = transferTypeId;
+//	}
+//
+//	public int getTransferStatusId() {
+//		return transferStatusId;
+//	}
+//
+//	public void setTransferStatusId(Integer transferStatusId) {
+//		this.transferStatusId = transferStatusId;
+//	}
 
 	public int getAccountFrom() {
 		return accountFrom;
@@ -67,8 +67,8 @@ public class Transfers {
 
 	@Override
 	public String toString() {
-		return "Transfers [transferId=" + transferId + ", transferTypeId=" + transferTypeId + ", transferStatusId="
-				+ transferStatusId + ", accountFrom=" + accountFrom + ", accountTo=" + accountTo + ", amount=" + amount
+		return "Transfers [transferId=" +  ", transferTypeId=" +  ", transferStatusId="
+				+  ", accountFrom=" + accountFrom + ", accountTo=" + accountTo + ", amount=" + amount
 				+ "]";
 	}
 	

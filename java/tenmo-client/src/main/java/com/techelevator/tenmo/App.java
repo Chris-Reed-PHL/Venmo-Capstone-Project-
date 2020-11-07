@@ -2,6 +2,7 @@ package com.techelevator.tenmo;
 
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import com.techelevator.tenmo.models.Accounts;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.TransferTypes;
 import com.techelevator.tenmo.models.Transfers;
+import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
@@ -99,10 +101,28 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
+		Transfers[] transfer = null;
+		 User[] user = null;
+	
+		try {
+			user = restTemplate.exchange(API_BASE_URL + "transfers/users/", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
+			transfer = restTemplate.exchange(API_BASE_URL + "transfers/history/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
+			System.out.println("-------------------------------------------");
+			System.out.println("Transfers");
+			System.out.println("ID         From/To     Amount");
+			System.out.println("-------------------------------------------");
+			for(int i = 0; i<transfer.length; i++) {
+				
+				
+			
+			System.out.println(transfer[i].getTransferId()+ "        "+ user[i].getUsername() + "              "+ transfer[i].getAmount());
+			}
+			}catch(Exception ex) {
+				System.out.println("No History Found");
+		}
 		
 	}
-
+	
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
 		
@@ -113,23 +133,63 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void sendBucks() {
 		// list all users, ask which user id and amount- 
 		Transfers transfer = new Transfers();
+		Accounts account = null;
+		
+		 User[] user = null;
+		 
+		 
+		
+		user = restTemplate.exchange(API_BASE_URL + "transfers/users/", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
+		account = restTemplate.exchange(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Accounts.class).getBody();
 
+		
+		System.out.println("-------------------------------------------");
+		System.out.println("User");
+		System.out.println("ID     Name");
+		System.out.println("-------------------------------------------");
+		for(int i = 0; i< user.length; i++) {
+			
+			if(!user[i].getId().equals(currentUser.getUser().getId())) {
+				
+				System.out.println(user[i].getId()+ "     " +user[i].getUsername());
+			}
+			
+			
+		}
+		System.out.println("-------------------------------------------");
+		
+		
 		transfer.setAccountFrom(currentUser.getUser().getId());
-		transfer.setTransferId(1);
-		transfer.setTransferStatusId(2);
-		transfer.setTransferTypeId(2);
+//		transfer.setTransferId(1);
+//		transfer.setTransferStatusId();
+//		transfer.setTransferTypeId();
 
 		Integer sendToId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
-		//System.out.println();
+		
+		boolean balanceChecker = false; 
+		
+		while( !balanceChecker) {
+			
+		
 		BigDecimal sendAmount = console.getUserInputBigDecimal("Enter amount");
+		if(sendAmount.compareTo(account.getBalance()) == 1) {
+			System.out.println("Sorry, you don't got that");
+			continue;
+		
+		}
+		else{ 
+			balanceChecker = true;
+		}
+		
 		transfer.setAccountTo(sendToId);
 		transfer.setAmount(sendAmount);
 		
 		transfer = restTemplate.postForObject(API_BASE_URL + "transfers/send/", makeTransferEntity(transfer), Transfers.class);
+		}
 		
-		
-	}
+	}	
 
+	
 	private void requestBucks() {
 		// TODO Auto-generated method stub
 		
@@ -199,7 +259,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	
 	private HttpEntity makeAuthEntity() {
 	 HttpHeaders headers = new HttpHeaders();
-	 //headers.setContentType(MediaType.APPLICATION_JSON);
+	 headers.setContentType(MediaType.APPLICATION_JSON);
 	    headers.setBearerAuth(AUTH_TOKEN);
 	    HttpEntity entity = new HttpEntity<>(headers);
 		return entity;

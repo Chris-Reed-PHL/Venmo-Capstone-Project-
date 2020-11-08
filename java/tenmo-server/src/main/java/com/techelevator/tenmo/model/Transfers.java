@@ -11,6 +11,10 @@ public class Transfers {
 	private Integer accountTo;
 	private BigDecimal amount;
 	
+	private String userName;
+	
+
+
 	public Transfers () {
 	
 		
@@ -63,11 +67,19 @@ public class Transfers {
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	@Override
 	public String toString() {
 		return "Transfers [transferId=" + transferId + ", transferTypeId=" + transferTypeId + ", transferStatusId="
-				+ transferStatusId + ", accountFrom=" + accountFrom + ", accountTo=" + accountTo + ", amount=" + amount
+				+ transferStatusId + ", accountFrom=" + accountFrom + ", accountTo=" + accountTo + ", amount=" + amount + "userName=" + userName
 				+ "]";
 	}
 	

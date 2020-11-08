@@ -42,8 +42,18 @@ public class TransferController {
 		return userDao.findAll();
 	}
 	
+//	@RequestMapping(path = "/history/{userId}", method = RequestMethod.GET)
+//	public List<Transfers> transferHistory(@PathVariable long userId){
+//		return dao.viewTransferHistory(userId);
+//	}
+	
 	@RequestMapping(path = "/history/{userId}", method = RequestMethod.GET)
-	public List<Transfers> transferHistory(@PathVariable long userId){
-		return dao.viewTransferHistory(userId);
+	public List<Transfers> transferHistoryWithUserName(@PathVariable long userId, String userName){
+		return dao.viewTransferHistoryWithUserNames(userId, userName);
+	}	
+	
+	@RequestMapping(path ="/details/{transferId}", method = RequestMethod.GET)
+	public Transfers transferdetails(@PathVariable long transferId) {
+		return dao.details(transferId);
 	}
 }

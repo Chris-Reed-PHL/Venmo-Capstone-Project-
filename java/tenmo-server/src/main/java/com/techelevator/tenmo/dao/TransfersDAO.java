@@ -12,9 +12,10 @@ public interface TransfersDAO {
 	
 	boolean requestBucks(Transfers transfer);
 	
-	List<Transfers> viewTransferHistory(Long userId);
+//	List<Transfers> viewTransferHistory(Long userId);
 	
+	List<Transfers> viewTransferHistoryWithUserNames(Long userId, String userName);
 	
-	
+	Transfers details(Long transferId);
 	
 }

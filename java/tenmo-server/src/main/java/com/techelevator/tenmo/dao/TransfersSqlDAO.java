@@ -67,23 +67,7 @@ public class TransfersSqlDAO implements TransfersDAO{
 		return updateResult;
 	}
 
-	//	@Override
-	//	public List <Transfers> viewTransferHistory(Long userId) {
-	//		List<Transfers> transactions =  new ArrayList<>();
-	//		Transfers transfer = null;
-	//		
-	//		String viewTransHistory =  "SELECT * FROM transfers t JOIN accounts a ON t.account_from = a.account_id WHERE a.user_id = ?"
-	//								+ " UNION"
-	//								+ " SELECT * FROM transfers t JOIN accounts a ON t.account_to = a.account_id WHERE a.user_id = ?";
-	//		SqlRowSet spending = jdbcTemplate.queryForRowSet(viewTransHistory,userId, userId );
-	//		
-	//		while(spending.next()) {
-	//			transfer = mapToTransfers(spending);
-	//			transactions.add(transfer);
-	//		}
-	//		
-	//		return transactions;
-	//	}
+
 
 	@Override
 	public List<Transfers> viewTransferHistoryWithUserNames(Long userId, String userName) {
@@ -118,6 +102,22 @@ public class TransfersSqlDAO implements TransfersDAO{
 		}
 		return transfer;
 	}
+	@Override
+	public Transfers toDetails(Long transferId) {
+		Transfers transfer = null;
+
+		String SqltransferDetails = "SELECT * FROM transfers t JOIN accounts a ON t.account_to = a.account_id  JOIN users u ON u.user_id = a.user_id  WHERE transfer_id =?";
+
+		SqlRowSet deets = jdbcTemplate.queryForRowSet(SqltransferDetails, transferId);
+
+		while(deets.next()) {
+			transfer = mapToTransfers(deets);
+		}
+		return transfer;
+	}
+	
+
+
 
 	private Transfers mapToTransfers(SqlRowSet t) {
 
@@ -132,7 +132,6 @@ public class TransfersSqlDAO implements TransfersDAO{
 		transfer.setUserName(t.getString("username"));
 		return transfer;
 	}
-
 
 
 

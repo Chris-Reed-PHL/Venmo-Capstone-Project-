@@ -127,18 +127,21 @@ public class App {
 			System.out.println("No History Found");
 		}
 		Integer detailId = console.getUserInputInteger("Please enter transfer ID to view details(0 to cancel)");
-
+		if(detailId == 0) {
+			mainMenu();
+		}
 		Accounts accounts = null;
 		Transfers transferDetail = null;
-		
+		Transfers toTransferDetail = null;
 
 		accounts = restTemplate.exchange(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Accounts.class).getBody();
 		transferDetail = restTemplate.exchange(API_BASE_URL + "transfers/details/" + detailId, HttpMethod.GET, makeAuthEntity(), Transfers.class).getBody();
-		
+		toTransferDetail = restTemplate.exchange(API_BASE_URL + "transfers/todetails/" + detailId, HttpMethod.GET, makeAuthEntity(), Transfers.class).getBody();
 		System.out.println("-------------------------------------------");
 		System.out.println("Transfer Details");
 		System.out.println("-------------------------------------------");
 		System.out.println("Id: " + transferDetail.getTransferId());
+
 
 		if( account.getAccountId()== transferDetail.getAccountFrom()) {
 
@@ -147,13 +150,13 @@ public class App {
 			System.out.println("From: " + transferDetail.getUserName()); 
 
 		if( account.getAccountId()== transferDetail.getAccountTo()) {
-			
+
 			System.out.println("To: " +  currentUser.getUser().getUsername());
 		}else
-			System.out.println("To: " +  transferDetail.getUserName());
+			System.out.println("To: " + toTransferDetail.getUserName());
 
 		if(transferDetail.getTransferTypeId() == 2) {
-			
+
 			System.out.println("Type: " + "Send");
 		}else
 			System.out.println("Type: " + "Request");
@@ -211,7 +214,9 @@ public class App {
 		transfer.setTransferTypeId(2);
 
 		Integer sendToId = console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel)");
-
+		if(sendToId == 0) {
+			mainMenu();
+		}
 		boolean balanceChecker = false; 
 
 		while( !balanceChecker) {
@@ -242,6 +247,7 @@ public class App {
 	}
 
 	private void exitProgram() {
+		System.out.println("Thank you for using TEnmo!");
 		System.exit(0);
 	}
 

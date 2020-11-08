@@ -2,6 +2,9 @@ package com.techelevator.tenmo.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import com.techelevator.tenmo.model.User;
 
 @RestController
 @RequestMapping("transfers")
+@PreAuthorize("isAuthenticated()")
 public class TransferController {
 	
 	private TransfersDAO dao;
@@ -28,12 +32,12 @@ public class TransferController {
 	}
 	
 	@RequestMapping(path = "/send", method = RequestMethod.POST)
-	public void sendTransfer( @RequestBody Transfers transfer) {
+	public void sendTransfer(@Valid @RequestBody Transfers transfer) {
 		dao.sendBucks(transfer);
 
 }
 	@RequestMapping(path = "/request", method = RequestMethod.POST)
-	public boolean requestTransfer(@RequestBody Transfers transfer) {
+	public boolean requestTransfer(@Valid @RequestBody Transfers transfer) {
 		return dao.requestBucks(transfer);
 	
 }
@@ -42,10 +46,7 @@ public class TransferController {
 		return userDao.findAll();
 	}
 	
-//	@RequestMapping(path = "/history/{userId}", method = RequestMethod.GET)
-//	public List<Transfers> transferHistory(@PathVariable long userId){
-//		return dao.viewTransferHistory(userId);
-//	}
+
 	
 	@RequestMapping(path = "/history/{userId}", method = RequestMethod.GET)
 	public List<Transfers> transferHistoryWithUserName(@PathVariable long userId, String userName){
@@ -55,5 +56,10 @@ public class TransferController {
 	@RequestMapping(path ="/details/{transferId}", method = RequestMethod.GET)
 	public Transfers transferdetails(@PathVariable long transferId) {
 		return dao.details(transferId);
+	}
+	
+	@RequestMapping(path ="/todetails/{transferId}", method = RequestMethod.GET)
+	public Transfers toTransferdetails(@PathVariable long transferId) {
+		return dao.toDetails(transferId);
 	}
 }

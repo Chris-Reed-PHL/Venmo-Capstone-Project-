@@ -18,4 +18,5 @@ public interface TransfersDAO {
 	
 	Transfers details(Long transferId);
 	
+	Transfers toDetails(Long transferId);
 }

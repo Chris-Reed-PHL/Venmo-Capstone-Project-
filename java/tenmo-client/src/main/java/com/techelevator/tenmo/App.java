@@ -136,7 +136,7 @@ public class App {
 		}
 		
 		Integer detailId = console.getUserInputInteger("Please enter transfer ID to view details(0 to cancel)");
-		for(int i = 0; i<transfer.length; i++) {
+		//for(int i = 0; i<transfer.length; i++) {
 			if(detailId == 0) {
 				mainMenu();
 			}
@@ -185,7 +185,7 @@ public class App {
 //			}else {
 //				System.out.println("INCORRECT INPUT!");
 //				break;
-			}
+		//	}
 			
 			
 		//}

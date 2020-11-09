@@ -139,7 +139,8 @@ public class App {
 		for(int i = 0; i<transfer.length; i++) {
 			if(detailId == 0) {
 				mainMenu();
-			}if(detailId == transfer[i].getTransferId()){
+			}
+			//if(detailId == transfer[i].getTransferId()){
 				//System.out.println("Incorrect input!");
 //				Accounts accounts = null;
 				Transfers transferDetail = null;
@@ -181,13 +182,13 @@ public class App {
 
 
 				System.out.println("Amount: "+"$"+transferDetail.getAmount());
-			}else {
-				System.out.println("INCORRECT INPUT!");
-				break;
+//			}else {
+//				System.out.println("INCORRECT INPUT!");
+//				break;
 			}
 			
 			
-		}
+		//}
 	
 
 	}

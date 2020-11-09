@@ -102,15 +102,15 @@ public class App {
 
 	private void viewTransferHistory() {
 		Transfers[] transfer = null;
-		User[] user = null;
+//		User[] user = null;
 		Accounts account = null;
 
 		try {
 
 			account = restTemplate.exchange(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Accounts.class).getBody();
-			user = restTemplate.exchange(API_BASE_URL + "transfers/users/", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
-			transfer = restTemplate.exchange(API_BASE_URL + "transfers/history/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
-			System.out.println("-------------------------------------------");
+//			user = restTemplate.exchange(API_BASE_URL + "transfers/users/", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
+//			transfer = restTemplate.exchange(API_BASE_URL + "transfers/history/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
+			transfer = restTemplate.exchange(API_BASE_URL + "transfers/history/" + account.getAccountId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
 			System.out.println("Transfers");
 			System.out.println("ID           From/To               Amount");
 			System.out.println("-------------------------------------------");
@@ -126,50 +126,62 @@ public class App {
 		}catch(Exception ex) {
 			System.out.println("No History Found");
 		}
+		
 		Integer detailId = console.getUserInputInteger("Please enter transfer ID to view details(0 to cancel)");
-		if(detailId == 0) {
-			mainMenu();
+		for(int i = 0; i<transfer.length; i++) {
+			if(detailId == 0) {
+				mainMenu();
+			}if(detailId == transfer[i].getTransferId()){
+				//System.out.println("Incorrect input!");
+//				Accounts accounts = null;
+				Transfers transferDetail = null;
+				Transfers toTransferDetail = null;
+
+//				accounts = restTemplate.exchange(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Accounts.class).getBody();
+				transferDetail = restTemplate.exchange(API_BASE_URL + "transfers/details/" + detailId, HttpMethod.GET, makeAuthEntity(), Transfers.class).getBody();
+				toTransferDetail = restTemplate.exchange(API_BASE_URL + "transfers/todetails/" + detailId, HttpMethod.GET, makeAuthEntity(), Transfers.class).getBody();
+				System.out.println("-------------------------------------------");
+				System.out.println("Transfer Details");
+				System.out.println("-------------------------------------------");
+				System.out.println("Id: " + transferDetail.getTransferId());
+
+
+				if( account.getAccountId()== transferDetail.getAccountFrom()) {
+
+					System.out.println("From: " + currentUser.getUser().getUsername());
+				}else
+					System.out.println("From: " + transferDetail.getUserName()); 
+
+				if( account.getAccountId()== transferDetail.getAccountTo()) {
+
+					System.out.println("To: " +  currentUser.getUser().getUsername());
+				}else
+					System.out.println("To: " + toTransferDetail.getUserName());
+
+				if(transferDetail.getTransferTypeId() == 2) {
+
+					System.out.println("Type: " + "Send");
+				}else
+					System.out.println("Type: " + "Request");
+				if(transferDetail.getTransferStatusId() ==2) {
+					System.out.println("Status: " + "Approved");
+				}else 
+					if(transferDetail.getTransferStatusId() ==1) {
+						System.out.println("Status: " + "Pending");
+					}else 
+						System.out.println("Status: " + "Rejected");
+
+
+				System.out.println("Amount: "+"$"+transferDetail.getAmount());
+			}else {
+				System.out.println("INCORRECT INPUT!");
+				break;
+			}
+			
+			
 		}
-		Accounts accounts = null;
-		Transfers transferDetail = null;
-		Transfers toTransferDetail = null;
+	
 
-		accounts = restTemplate.exchange(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Accounts.class).getBody();
-		transferDetail = restTemplate.exchange(API_BASE_URL + "transfers/details/" + detailId, HttpMethod.GET, makeAuthEntity(), Transfers.class).getBody();
-		toTransferDetail = restTemplate.exchange(API_BASE_URL + "transfers/todetails/" + detailId, HttpMethod.GET, makeAuthEntity(), Transfers.class).getBody();
-		System.out.println("-------------------------------------------");
-		System.out.println("Transfer Details");
-		System.out.println("-------------------------------------------");
-		System.out.println("Id: " + transferDetail.getTransferId());
-
-
-		if( account.getAccountId()== transferDetail.getAccountFrom()) {
-
-			System.out.println("From: " + currentUser.getUser().getUsername());
-		}else
-			System.out.println("From: " + transferDetail.getUserName()); 
-
-		if( account.getAccountId()== transferDetail.getAccountTo()) {
-
-			System.out.println("To: " +  currentUser.getUser().getUsername());
-		}else
-			System.out.println("To: " + toTransferDetail.getUserName());
-
-		if(transferDetail.getTransferTypeId() == 2) {
-
-			System.out.println("Type: " + "Send");
-		}else
-			System.out.println("Type: " + "Request");
-		if(transferDetail.getTransferStatusId() ==2) {
-			System.out.println("Status: " + "Approved");
-		}else 
-			if(transferDetail.getTransferStatusId() ==1) {
-				System.out.println("Status: " + "Pending");
-			}else 
-				System.out.println("Status: " + "Rejected");
-
-
-		System.out.println("Amount: "+"$"+transferDetail.getAmount());
 	}
 
 	private void viewPendingRequests() {

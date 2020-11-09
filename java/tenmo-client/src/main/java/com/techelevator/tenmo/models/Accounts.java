@@ -35,5 +35,4 @@ public class Accounts {
 	public String toString() {
 		return "Accounts [accountId=" + accountId + ", userId=" + userId + ", balance=" + balance + "]";
 	}
-	
 }

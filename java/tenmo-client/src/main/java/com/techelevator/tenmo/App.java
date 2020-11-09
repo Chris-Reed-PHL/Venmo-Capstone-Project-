@@ -242,9 +242,64 @@ public class App {
 
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
+		Transfers transfer = new Transfers();
+		Accounts account = null;
 
-	}
+		User[] user = null;
+
+
+
+		user = restTemplate.exchange(API_BASE_URL + "transfers/users/", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
+		account = restTemplate.exchange(API_BASE_URL + "accounts/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Accounts.class).getBody();
+
+
+		System.out.println("-------------------------------------------");
+		System.out.println("User");
+		System.out.println("ID     Name");
+		System.out.println("-------------------------------------------");
+		for(int i = 0; i< user.length; i++) {
+
+			if(!user[i].getId().equals(currentUser.getUser().getId())) {
+
+				System.out.println(user[i].getId()+ "     " +user[i].getUsername());
+			}
+
+
+		}
+		System.out.println("-------------------------------------------");
+
+
+		transfer.setAccountFrom(currentUser.getUser().getId());
+		transfer.setTransferId(1);
+		transfer.setTransferStatusId(2);
+		transfer.setTransferTypeId(2);
+
+		Integer requestFromId = console.getUserInputInteger("Enter ID of user you are requesting from (0 to cancel)");
+		if(requestFromId == 0) {
+			mainMenu();
+		}
+//		boolean balanceChecker = false; 
+//
+//		while( !balanceChecker) {
+
+
+			BigDecimal requestAmount = console.getUserInputBigDecimal("Enter amount");
+//			if(requestAmount.compareTo(account.getBalance()) == 1) {
+//				System.out.println("Sorry, you don't got that");
+//				continue;
+//
+//			}
+//			else{ 
+//				balanceChecker = true;
+//			}
+
+			transfer.setAccountTo(requestFromId);
+			transfer.setAmount(requestAmount);
+
+			transfer = restTemplate.postForObject(API_BASE_URL + "transfers/send/", makeTransferEntity(transfer), Transfers.class);
+		}
+
+//	}	
 
 	private void exitProgram() {
 		System.out.println("Thank you for using TEnmo!");

@@ -87,7 +87,7 @@ public class TransfersSqlDAO implements TransfersDAO{
 
 		return transactions;
 	}
-
+//from user details
 	@Override
 	public Transfers details(Long transferId) {
 

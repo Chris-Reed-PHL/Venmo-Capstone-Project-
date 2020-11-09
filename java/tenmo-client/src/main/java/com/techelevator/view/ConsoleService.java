@@ -88,5 +88,5 @@ public class ConsoleService {
 			}
 		} while(result == null);
 		return result;
-	}
+ }
 }

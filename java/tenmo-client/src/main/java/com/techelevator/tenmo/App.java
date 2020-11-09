@@ -112,14 +112,22 @@ public class App {
 //			transfer = restTemplate.exchange(API_BASE_URL + "transfers/history/" + currentUser.getUser().getId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
 			transfer = restTemplate.exchange(API_BASE_URL + "transfers/history/" + account.getAccountId(), HttpMethod.GET, makeAuthEntity(), Transfers[].class).getBody();
 			System.out.println("Transfers");
-			System.out.println("ID           From/To               Amount");
+			String menuString = String.format("%1$-10s %2$-25s %3$s", "ID", "From/To", "Amount");
+			System.out.println(menuString);
+//			System.out.println("ID           From/To               Amount");
 			System.out.println("-------------------------------------------");
 			for(int i = 0; i<transfer.length; i++) {
 
 				if(account.getAccountId() == transfer[i].getAccountTo()) {
-					System.out.println(transfer[i].getTransferId()+ "          From: "+  transfer[i].getUserName()+ "             $ "+ transfer[i].getAmount());
-				}else
-					System.out.println(transfer[i].getTransferId()+ "          To: "+  transfer[i].getUserName()+ "             $ "+ transfer[i].getAmount());
+					String string = String.format("%1$-10s %2$-25s %3$s", transfer[i].getTransferId(), "From: " + transfer[i].getUserName(), "$" + transfer[i].getAmount());
+					System.out.println(string);
+//				System.out.println(transfer[i].getTransferId()+ "          From: "+  transfer[i].getUserName()+ "             $ "+ transfer[i].getAmount());
+				}else {
+					String string = String.format("%1$-10s %2$-25s %3$s", transfer[i].getTransferId(), "To: " + transfer[i].getUserName(), "$" + transfer[i].getAmount());
+					System.out.println(string);
+				}
+					
+//					System.out.println(transfer[i].getTransferId()+ "          To: "+  transfer[i].getUserName()+ "             $ "+ transfer[i].getAmount());
 			}
 			System.out.println("-------------------------------------------");
 
